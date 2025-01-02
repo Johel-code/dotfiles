@@ -10,6 +10,7 @@
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
+export PATH=~/bin:$PATH
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,
@@ -121,6 +122,18 @@ alias lla='lsd -lha --group-dirs=first'
 alias ls='lsd --group-dirs=first'
 alias cat='batcat'
 alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
+alias fd='fdfind'
+alias v='fd --type f --hidden --exclude .git | fzf-tmux -p --reverse | xargs nvim'
+alias t=tmux
+alias ta='tmux a'
+alias vim=nvim
+
+#Obsidian
+alias oo='cd $HOME/notes/Notas/'
+alias or='vim $HOME/notes/Notas/inbox/*.md'
+
+#Path shortcuts
+alias nvc='cd $HOME/.config/nvim && vim'
 
 bindkey -M viins 'jj' vi-cmd-mode 
 
