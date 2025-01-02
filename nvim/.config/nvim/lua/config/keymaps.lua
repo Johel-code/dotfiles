@@ -4,4 +4,68 @@
 
 vim.keymap.set("i", "jj", "<ESC>", { desc = "Exit Insert mode with jk" })
 vim.keymap.set("n", "<leader>w", ":w<CR>", { desc = "Save file with jjw" })
--- vim.keymap.set("n", "<leader>q", ":q<CR>", { desc = "Close window" })
+vim.keymap.set("n", "<leader>q", ":bd!<CR>", { desc = "Close buffer" })
+--
+--
+--------------
+-- obsidian --
+--------------
+--
+-- >>> oo # from shell, navigate to vault (optional)
+--
+-- # NEW NOTE
+-- >>> on "Note Name" # call my "obsidian new note" shell script (~/bin/on)
+-- >>>
+-- >>> ))) <leader>on # inside vim now, format note as template
+-- >>> ))) # add tag, e.g. fact / blog / video / etc..
+-- >>> ))) # add hubs, e.g. [[python]], [[machine-learning]], etc...
+-- >>> ))) <leader>of # format title
+--
+-- # END OF DAY/WEEK REVIEW
+-- >>> or # review notes in inbox
+-- >>>
+-- >>> ))) <leader>ok # inside vim now, move to zettelkasten
+-- >>> ))) <leader>odd # or delete
+-- >>>
+-- >>> og # organize saved notes from zettelkasten into notes/[tag] folders
+-- >>> ou # sync local with Notion
+--
+-- navigate to vault
+-- vim.keymap.set("n", "<leader>oo", ":cd $HOME/notes/Notas<cr>")
+vim.keymap.set("n", "<leader>oo", function()
+  -- Cambia la ruta al directorio de tu vault
+  local vault_path = "~/notes/Notas/"
+  -- vim.cmd("cd " .. vault_path) -- Cambiar el directorio actual al vault
+  vim.cmd("Neotree dir=" .. vault_path) -- Abre el explorador de archivos, opcional
+  -- print("Navigated to Obsidian Vault: " .. vault_path)
+end, { desc = "Go to Obsidian Vault" })
+--
+-- convert note to template and remove leading white space
+vim.keymap.set("n", "<leader>on", ":ObsidianTemplate templete-note<cr> :lua vim.cmd([[1,/^\\S/s/^\\n\\{1,}//]])<cr>")
+
+-- strip date from note title and replace dashes with spaces
+-- must have cursor on title
+vim.keymap.set("n", "<leader>of", ":s/\\(# \\)[^_]*_/\\1/ | s/-/ /g<cr>")
+--
+-- search for files in full vault
+-- vim.keymap.set("n", "<leader>os", ':Telescope find_files search_dirs={"~/notes/Notas"}<cr>')
+-- vim.keymap.set("n", "<leader>oz", ':Telescope live_grep search_dirs={"~/notes/Notas"}<cr>')
+
+-- search for files in full vault
+vim.keymap.set("n", "<leader>os", function()
+  require("fzf-lua").files({ cwd = "~/notes/Notas" })
+end, { desc = "Search files in ~/notes/Notas" })
+
+vim.keymap.set("n", "<leader>oz", function()
+  require("fzf-lua").live_grep({ cwd = "~/notes/Notas" })
+end, { desc = "Live grep in ~/notes/Notas" })
+
+-- search for files in notes (ignore zettelkasten)
+-- vim.keymap.set("n", "<leader>ois", ":Telescope find_files search_dirs={\"/Users/alex/library/Mobile\\ Documents/iCloud~md~obsidian/Documents/ZazenCodes/notes\"}<cr>")
+-- vim.keymap.set("n", "<leader>oiz", ":Telescope live_grep search_dirs={\"/Users/alex/library/Mobile\\ Documents/iCloud~md~obsidian/Documents/ZazenCodes/notes\"}<cr>")
+--
+-- for review workflow
+-- move file in current buffer to zettelkasten folder
+vim.keymap.set("n", "<leader>ok", ":!mv '%:p' ~/notes/Notas/zettelkasten<cr>:bd<cr>")
+-- delete file in current buffer
+vim.keymap.set("n", "<leader>odd", ":!rm '%:p'<cr>:bd<cr>")

@@ -1,7 +1,7 @@
 return {
   "nvim-treesitter/nvim-treesitter",
   opts = {
-    ensure_installed = { "java", "php", "phpdoc", "typescript", "blade" },
+    ensure_installed = { "java", "php", "phpdoc", "typescript", "blade", "markdown", "markdown_inline" },
     highlight = { enable = true },
     indent = { enable = true },
   },
